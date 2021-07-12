@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ChiaRPC.Parsers;
+using System.Text.Json.Serialization;
 
 namespace ChiaRPC.Models
 {
@@ -8,10 +9,12 @@ namespace ChiaRPC.Models
         public Coin Coin { get; init; }
 
         [JsonPropertyName("puzzle_reveal")]
-        public SerializedProgram PuzzleReveal { get; init; }
+        [JsonConverter(typeof(HexBytesConverter))]
+        public HexBytes PuzzleReveal { get; init; }
 
         [JsonPropertyName("solution")]
-        public SerializedProgram Solution { get; init; }
+        [JsonConverter(typeof(HexBytesConverter))]
+        public HexBytes Solution { get; init; }
 
         public CoinSolution()
         {
