@@ -8,8 +8,8 @@ namespace ChiaRPC.Parsers
     {
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            long timestamp = reader.GetInt64();
-            return DateTimeOffset.FromUnixTimeSeconds(timestamp);
+            double timestamp = reader.GetDouble();
+            return DateTimeOffset.FromUnixTimeMilliseconds((long)(timestamp * 1000));
         }
 
         public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
