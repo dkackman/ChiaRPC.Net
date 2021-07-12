@@ -19,7 +19,7 @@ namespace ChiaRPC.Clients
             return result.BlockchainState;
         }
 
-        public async Task<Block> GetBlockAsync(HexBytes headerHash)
+        public async Task<FullBlock> GetBlockAsync(HexBytes headerHash)
         {
             var result = await PostAsync<GetBlockResult>(FullNodeRoutes.GetBlock(), new Dictionary<string, string>()
             {
@@ -28,7 +28,7 @@ namespace ChiaRPC.Clients
             return result.Block;
         }
 
-        public async Task<Block[]> GetBlocksAsync(uint startHeight, uint endHeight)
+        public async Task<FullBlock[]> GetBlocksAsync(uint startHeight, uint endHeight)
         {
             var result = await PostAsync<GetBlocksResult>(FullNodeRoutes.GetBlocks(), new Dictionary<string, string>()
             {

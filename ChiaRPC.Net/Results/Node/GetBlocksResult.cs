@@ -6,7 +6,7 @@ namespace ChiaRPC.Results
     internal sealed class GetBlocksResult : ChiaResult
     {
         [JsonPropertyName("blocks")]
-        public Block[] Blocks { get; init; }
+        public FullBlock[] Blocks { get; init; }
 
         [JsonConstructor]
         public GetBlocksResult()

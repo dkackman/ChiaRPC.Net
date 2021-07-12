@@ -12,6 +12,16 @@ namespace ChiaRPC.Models
         [JsonConverter(typeof(HexBytesConverter))]
         public HexBytes InfusedChallengeChainSubSlotHash { get; init; }
 
+        [JsonPropertyName("subepoch_summary_hash")]
+        [JsonConverter(typeof(HexBytesConverter))]
+        public HexBytes SubepochSummaryHash { get; init; }
+
+        [JsonPropertyName("new_sub_slot_iters")]
+        public ulong NewSubSlotIters { get; init; }
+
+        [JsonPropertyName("new_difficulty")]
+        public ulong NewDifficulty { get; init; }
+
         public ChallengeChainSubSlot()
         {
         }

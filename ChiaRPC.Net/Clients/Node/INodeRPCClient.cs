@@ -16,7 +16,7 @@ namespace ChiaRPC.Clients
         /// </summary>
         /// <param name="headerHash"></param>
         /// <returns></returns>
-        Task<Block> GetBlockAsync(HexBytes headerHash);
+        Task<FullBlock> GetBlockAsync(HexBytes headerHash);
 
         /// <summary>
         /// Gets a list of full blocks.
@@ -24,7 +24,7 @@ namespace ChiaRPC.Clients
         /// <param name="startHeight"></param>
         /// <param name="endHeight"></param>
         /// <returns></returns>
-        Task<Block[]> GetBlocksAsync(uint startHeight, uint endHeight);
+        Task<FullBlock[]> GetBlocksAsync(uint startHeight, uint endHeight);
 
         /// <summary>
         /// Gets a recent EndOfSubSlotBundle.
