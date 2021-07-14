@@ -90,13 +90,13 @@ namespace ChiaRPC.Models
                     bytes);
 
         public override bool Equals(object obj)
-            => obj is HexBytes other && Hex == other.Hex;
+            => obj is HexBytes other && Hex.ToUpperInvariant() == other.Hex.ToUpperInvariant();
 
         public override int GetHashCode()
             => HashCode.Combine(Hex);
 
         public override string ToString()
-            => Hex;
+            => Hex.ToUpperInvariant();
 
         public static HexBytes Empty
             => new HexBytes("", Array.Empty<byte>());
