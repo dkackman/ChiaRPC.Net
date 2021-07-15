@@ -32,7 +32,7 @@ namespace ChiaRPC.Models
         [JsonPropertyName("additions")]
         public Coin[] Additions { get; init; }
 
-        [JsonPropertyName("additions")]
+        [JsonPropertyName("removals")]
         public Coin[] Removals { get; init; }
 
         [JsonPropertyName("wallet_id")]

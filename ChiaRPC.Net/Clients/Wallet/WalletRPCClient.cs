@@ -86,11 +86,11 @@ namespace ChiaRPC.Clients
         /// <returns>A record representing the transaction. The transaction id is stored in the name property.</returns>
         public async Task<TransactionRecord> SendTransactionAsync(uint walletId, ulong amount, ulong fee, string targetAddress)
         {
-            var result = await PostAsync<TransactionResult>(WalletRoutes.SendTransaction(), new Dictionary<string, string>()
+            var result = await PostAsyncRaw<TransactionResult>(WalletRoutes.SendTransaction(), new Dictionary<string, object>()
             {
                 ["wallet_id"] = $"{walletId}",
-                ["amount"] = $"{amount}",
-                ["fee"] = $"{fee}",
+                ["amount"] = amount,
+                ["fee"] = fee,
                 ["address"] = targetAddress,
             });
 
