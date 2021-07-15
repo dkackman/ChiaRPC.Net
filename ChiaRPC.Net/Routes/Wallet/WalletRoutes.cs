@@ -22,6 +22,9 @@ namespace ChiaRPC.Routes
         public static Uri SendTransaction()
             => new Uri("send_transaction", UriKind.Relative);
 
+        public static Uri SendTransactionMulti()
+            => new Uri("send_transaction_multi", UriKind.Relative);
+
         public static Uri GetTransaction()
             => new Uri("get_transaction", UriKind.Relative);
 

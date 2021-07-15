@@ -2,7 +2,9 @@
 using ChiaRPC.Results;
 using ChiaRPC.Routes;
 using ChiaRPC.Util;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChiaRPC.Clients
@@ -88,7 +90,7 @@ namespace ChiaRPC.Clients
         {
             var result = await PostAsyncRaw<TransactionResult>(WalletRoutes.SendTransaction(), new Dictionary<string, object>()
             {
-                ["wallet_id"] = $"{walletId}",
+                ["wallet_id"] = walletId,
                 ["amount"] = amount,
                 ["fee"] = fee,
                 ["address"] = targetAddress,
@@ -109,6 +111,48 @@ namespace ChiaRPC.Clients
         {
             var address = Bech32M.PuzzleHashToAddress(targetPuzzleHash);
             return SendTransactionAsync(walletId, amount, fee, address);
+        }
+
+        /// <summary>
+        /// Sends a standard transaction to a single payeer.
+        /// </summary>
+        /// <param name="walletId">The id of the wallet to take funds from</param>
+        /// <param name="fee">The amount of mojo used as fee</param>
+        /// <param name="payeer">The payeer</param>
+        /// <returns></returns>
+        public Task<TransactionRecord> SendTransactionAsync(uint walletId, ulong fee, Payeer payeer)
+            => SendTransactionAsync(walletId, fee, payeer.Amount, payeer.TargetPuzzleHash);
+
+        /// <summary>
+        /// Sends a transaction with multiple payeers.
+        /// </summary>
+        /// <param name="walletId">The id of the wallet to take funds from</param>
+        /// <param name="fee">The amount of mojo used as fee</param>
+        /// <param name="payeers">The payeers</param>
+        /// <param name="coins">The coins that will spend in the transaction</param>
+        /// <returns></returns>
+        public async Task<TransactionRecord> SendTransactionMultiAsync(uint walletId, ulong fee, IEnumerable<Payeer> payeers, IEnumerable<Coin> coins = null)
+        {
+            if (!payeers.Any())
+            {
+                throw new InvalidOperationException("Please provide at least one payeer");
+            }
+
+            var parameters = new Dictionary<string, object>()
+            {
+                ["wallet_id"] = walletId,
+                ["fee"] = fee,
+                ["additions"] = payeers
+            };
+
+            if (coins != null && coins.Any())
+            {
+                parameters.Add("coins", coins);
+            }
+
+            var result = await PostAsyncRaw<TransactionResult>(WalletRoutes.SendTransactionMulti(), parameters);
+
+            return result.Transaction;
         }
 
         /// <summary>
