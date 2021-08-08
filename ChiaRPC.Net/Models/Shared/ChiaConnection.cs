@@ -7,7 +7,8 @@ namespace ChiaRPC.Models
     public sealed class ChiaConnection
     {
         [JsonPropertyName("node_id")]
-        public string NodeId { get; init; }
+        [JsonConverter(typeof(HexBytesConverter))]
+        public HexBytes NodeId { get; init; }
 
         [JsonPropertyName("bytes_read")]
         public ulong BytesRead { get; init; }
@@ -30,6 +31,10 @@ namespace ChiaRPC.Models
 
         [JsonPropertyName("type")]
         public int Type { get; init; }
+
+        [JsonPropertyName("last_message_time")]
+        [JsonConverter(typeof(DateTimeOffsetConverter))]
+        public DateTimeOffsetConverter LastMessageTime { get; init; }
 
         [JsonConstructor]
         public ChiaConnection()

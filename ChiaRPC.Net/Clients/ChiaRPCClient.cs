@@ -72,31 +72,67 @@ namespace ChiaRPC.Clients
             return result.Connections;
         }
 
-        protected async Task<T> PostAsyncRaw<T>(Uri requestUri, object parameters = null, bool throwOnError = true) where T : ChiaResult
+        /// <summary>
+        /// Opens a connection to another peer.
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        public async Task OpenConnection(string host, ushort port)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(ApiUrl, requestUri))
+            await PostAsync(SharedRoutes.OpenConnection(), new Dictionary<string, string>()
             {
-                Content = JsonContent.Create(parameters ?? new Dictionary<string, string>())
-            };
-
-            var response = await Client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var result = await response.Content.ReadFromJsonAsync<T>();
-
-            if (throwOnError && !result.Success)
-            {
-                throw new HttpRequestException("Chia responded with unsuccessful");
-            }
-            //
-            return !result.Success
-                ? default
-                : result;
+                ["host"] = host,
+                ["port"] = $"{port}",
+            });
         }
 
-        protected Task<T> PostAsync<T>(Uri requestUri, Dictionary<string, string> parameters = null, bool throwOnError = true) where T : ChiaResult
-            => PostAsyncRaw<T>(requestUri, parameters, throwOnError);
+        /// <summary>
+        /// Opens a connection to another peer.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public Task OpenConnection(Uri address)
+            => OpenConnection(address.Host, (ushort)address.Port);
 
-        protected Task PostAsync(Uri requestUri, Dictionary<string, string> parameters = null)
-            => PostAsync<ChiaResult>(requestUri, parameters);
+        /// <summary>
+        /// Closes a connection with a peer.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public async Task CloseConnection(HexBytes nodeId)
+        {
+            await PostAsync(SharedRoutes.CloseConnection(), new Dictionary<string, string>()
+            {
+                ["node_id"] = $"{nodeId}"
+            });
+        }
+
+        protected async Task<T> PostAsyncRaw<T>(Uri requestUri, object parameters = null, bool throwOnError = true) where T : ChiaResult
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(ApiUrl, requestUri))
+                {
+                    Content = JsonContent.Create(parameters ?? new Dictionary<string, string>())
+                };
+
+                var response = await Client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<T>();
+
+                if (throwOnError && !result.Success)
+                {
+                    throw new HttpRequestException("Chia responded with unsuccessful");
+                }
+                //
+                return !result.Success
+                    ? default
+                    : result;
+            }
+
+            protected Task<T> PostAsync<T>(Uri requestUri, Dictionary<string, string> parameters = null, bool throwOnError = true) where T : ChiaResult
+                => PostAsyncRaw<T>(requestUri, parameters, throwOnError);
+
+            protected Task PostAsync(Uri requestUri, Dictionary<string, string> parameters = null)
+                => PostAsync<ChiaResult>(requestUri, parameters);
+        }
     }
-}
