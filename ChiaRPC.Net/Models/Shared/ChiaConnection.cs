@@ -1,4 +1,5 @@
 ﻿using ChiaRPC.Parsers;
+using System;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -34,7 +35,7 @@ namespace ChiaRPC.Models
 
         [JsonPropertyName("last_message_time")]
         [JsonConverter(typeof(DateTimeOffsetConverter))]
-        public DateTimeOffsetConverter LastMessageTime { get; init; }
+        public DateTimeOffset LastMessageTime { get; init; }
 
         [JsonConstructor]
         public ChiaConnection()
