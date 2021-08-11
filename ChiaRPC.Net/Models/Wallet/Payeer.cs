@@ -1,4 +1,5 @@
-﻿using ChiaRPC.Util;
+﻿using ChiaRPC.Parsers;
+using ChiaRPC.Util;
 using System.Text.Json.Serialization;
 
 namespace ChiaRPC.Models
@@ -9,6 +10,7 @@ namespace ChiaRPC.Models
         public ulong Amount { get; }
 
         [JsonPropertyName("puzzle_hash")]
+        [JsonConverter(typeof(HexBytesConverter))]
         public HexBytes TargetPuzzleHash { get; }
 
         public Payeer(ulong amount, HexBytes targetPuzzleHash)
